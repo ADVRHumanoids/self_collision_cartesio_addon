@@ -5,12 +5,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(MacroInstallLib)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
 
-find_package(catkin REQUIRED COMPONENTS
-    cartesian_interface)
-
+find_package(catkin REQUIRED eigen_conversions)
 find_package(OpenSoT REQUIRED)
-
-FIND_PACKAGE(FCL 0.6 REQUIRED)
+find_package(cartesian_interface REQUIRED)
+find_package(FCL 0.6 REQUIRED)
 find_package(Eigen3 REQUIRED)
 
 include_directories(${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS})
@@ -68,7 +66,9 @@ catkin_package(
 ## Addons for libCartesianOpenSot
 include_directories(${FCL_INCLUDE_DIRS})
 add_library(CartesioSelfCollisionAvoidanceAddon SHARED src/SelfCollisionAvoidanceAddon.cpp)
-target_link_libraries(CartesioSelfCollisionAvoidanceAddon PRIVATE ${OpenSoT_LIBRARIES}
+target_link_libraries(CartesioSelfCollisionAvoidanceAddon PRIVATE 
+							  ${OpenSoT_LIBRARIES}
+                                                          ${cartesian_interface_LIBRARIES}
                                                           ${catkin_LIBRARIES}
                                                           ${FCL_LIBRARIES})
 install(TARGETS CartesioSelfCollisionAvoidanceAddon CartesioSelfCollisionAvoidanceAddon
